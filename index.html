@@ -4,263 +4,49 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tosia Trouble Tracker</title>
-<meta name="description" content="Days since Tosia's last security, legal or technical accident.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦫</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --sky-top: #3fa9f5;
-    --sky-bottom: #9fdcff;
-    --yellow: #fed90f;
-    --ink: #1a1a1a;
-    --red: #d6262b;
-    --cream: #fff6d5;
-    --card: #fffdf4;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; }
-  body {
-    min-height: 100vh;
-    background-color: var(--sky-bottom);
-    background-image:
-      radial-gradient(ellipse 120px 50px at 12% 14%, #fff 60%, transparent 62%),
-      radial-gradient(ellipse 80px 45px at 17% 10%, #fff 60%, transparent 62%),
-      radial-gradient(ellipse 150px 55px at 85% 22%, #fff 60%, transparent 62%),
-      radial-gradient(ellipse 90px 50px at 80% 17%, #fff 60%, transparent 62%),
-      radial-gradient(ellipse 110px 40px at 50% 6%, #fff 60%, transparent 62%),
-      radial-gradient(ellipse 130px 45px at 8% 58%, #fff 60%, transparent 62%),
-      radial-gradient(ellipse 140px 50px at 94% 66%, #fff 60%, transparent 62%),
-      linear-gradient(var(--sky-top), var(--sky-bottom));
-    background-attachment: fixed;
-    color: var(--ink);
-    font-family: "Patrick Hand", "Comic Sans MS", system-ui, sans-serif;
-    font-size: 20px;
-    padding: 24px 16px 48px;
-  }
-  main { max-width: 640px; margin: 0 auto; }
-  h1 {
-    font-family: "Luckiest Guy", Impact, sans-serif;
-    font-weight: 400;
-    text-align: center;
-    color: var(--yellow);
-    font-size: clamp(2.2rem, 9vw, 4rem);
-    line-height: 1;
-    letter-spacing: 1px;
-    margin: 0 0 4px;
-    -webkit-text-stroke: 2px var(--ink);
-    text-shadow: 3px 3px 0 var(--ink), 5px 5px 0 rgba(0,0,0,.2);
-    transform: rotate(-2deg);
-  }
-  .tagline { text-align: center; margin: 8px 0 12px; font-size: 1.1rem; }
-  .scene { display: block; width: 100%; max-width: 560px; height: auto; margin: 0 auto; }
-  .sign-text { font-family: "Luckiest Guy", Impact, sans-serif; fill: var(--ink); }
-  #days { fill: var(--red); }
-  .bump { animation: bump .6s ease-out; transform-box: fill-box; transform-origin: center; }
-  @keyframes bump { 0% { transform: scale(.3) rotate(-15deg); } 70% { transform: scale(1.15) rotate(4deg); } 100% { transform: scale(1); } }
-
-  .card {
-    background: var(--card);
-    border: 4px solid var(--ink);
-    border-radius: 18px;
-    box-shadow: 6px 6px 0 var(--ink);
-    padding: 18px 20px;
-    margin-top: 18px;
-  }
-  .mood { font-family: "Luckiest Guy", Impact, sans-serif; font-size: 1.6rem; text-align: center; margin: 0; }
-  .record { display: inline-block; background: var(--yellow); border: 3px solid var(--ink); border-radius: 999px; padding: 0 12px; margin-left: 6px; font-size: 1rem; vertical-align: middle; }
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; text-align: center; }
-  .stat b { display: block; font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400; font-size: 1.7rem; line-height: 1.1; }
-  .stat span { font-size: .95rem; }
-  .last { margin: 14px 0 0; text-align: center; }
-
-  .reset {
-    display: block;
-    width: 100%;
-    margin-top: 18px;
-    padding: 14px 18px;
-    font-family: "Luckiest Guy", Impact, sans-serif;
-    font-size: 1.6rem;
-    letter-spacing: 1px;
-    color: #fff;
-    background: var(--red);
-    border: 4px solid var(--ink);
-    border-radius: 16px;
-    box-shadow: 0 6px 0 var(--ink);
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: transform .08s, box-shadow .08s;
-  }
-  .reset:hover { transform: translateY(2px); box-shadow: 0 4px 0 var(--ink); }
-  .reset:active { transform: translateY(6px); box-shadow: 0 0 0 var(--ink); }
-  .reset:focus-visible { outline: 4px dashed var(--yellow); outline-offset: 4px; }
-  .how { font-size: 1rem; margin: 10px 0 0; text-align: center; }
-
-  h2 { font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400; margin: 0 0 8px; font-size: 1.5rem; }
-  ol.log { list-style: none; padding: 0; margin: 0; }
-  ol.log li { border-top: 2px dashed #c9bf9a; padding: 8px 0; display: flex; gap: 12px; align-items: baseline; }
-  ol.log li:first-child { border-top: 0; }
-  ol.log time { font-weight: 700; white-space: nowrap; min-width: 6.5em; }
-  ol.log .gap { margin-left: auto; white-space: nowrap; font-size: .9rem; opacity: .7; }
-
-  footer { text-align: center; font-size: .95rem; margin-top: 24px; }
-  @media (max-width: 420px) { .stats { gap: 4px; } .stat b { font-size: 1.4rem; } ol.log li { flex-wrap: wrap; gap: 2px 10px; } ol.log .gap { margin-left: 0; } }
+  html, body { margin: 0; height: 100%; }
+  body { background: #d9dcb8; display: grid; place-items: center; }
+  a { display: block; height: 96vh; max-width: 96vw; aspect-ratio: 600 / 820; }
+  svg { width: 100%; height: 100%; }
+  text { font-family: "Archivo Black", "Arial Black", sans-serif; fill: #222; }
+  #days { fill: #c4161c; }
+  .credit { position: fixed; right: 6px; bottom: 4px; font: 11px sans-serif; color: #888; }
+  .credit a { display: inline; height: auto; color: inherit; }
 </style>
 </head>
 <body>
-<main>
-  <h1>Tosia Trouble Tracker</h1>
-  <p class="tagline">Security · Legal · Technical — we track it all.</p>
-
-  <svg class="scene" id="scene" viewBox="0 0 600 730" role="img" aria-label="A beaver in a hard hat holding a sign counting the days since Tosia's last accident.">
-    <defs>
-      <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <line x1="0" y1="0" x2="0" y2="14" stroke="#2e1a0b" stroke-width="3"/>
-      </pattern>
-    </defs>
-    <g stroke="#1a1a1a" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
-      <!-- ground -->
-      <path d="M-10 700 Q150 680 300 692 T610 690 L610 740 L-10 740 Z" fill="#6bbf3b"/>
-      <!-- tail -->
-      <g transform="rotate(-22 450 640)">
-        <ellipse cx="450" cy="640" rx="95" ry="38" fill="#5c3a1e"/>
-        <ellipse cx="450" cy="640" rx="95" ry="38" fill="url(#hatch)" stroke="none" opacity=".55"/>
-      </g>
-      <!-- body -->
-      <ellipse cx="300" cy="595" rx="118" ry="112" fill="#9a5b2e"/>
-      <ellipse cx="300" cy="615" rx="74" ry="82" fill="#d39a62" stroke-width="3"/>
-      <!-- feet -->
-      <ellipse cx="240" cy="702" rx="42" ry="16" fill="#5c3a1e"/>
-      <ellipse cx="360" cy="702" rx="42" ry="16" fill="#5c3a1e"/>
-      <path d="M222 700 v8 M240 700 v9 M258 700 v8 M342 700 v8 M360 700 v9 M378 700 v8" stroke-width="3"/>
-      <!-- post -->
-      <rect x="289" y="290" width="22" height="415" fill="#b07433"/>
-      <!-- sign -->
-      <rect x="60" y="15" width="480" height="295" rx="14" fill="#fed90f"/>
-      <rect x="78" y="32" width="444" height="261" rx="8" fill="#fff6d5"/>
-      <circle cx="92" cy="46" r="5" fill="#999"/><circle cx="508" cy="46" r="5" fill="#999"/>
-      <circle cx="92" cy="279" r="5" fill="#999"/><circle cx="508" cy="279" r="5" fill="#999"/>
-      <text class="sign-text" x="300" y="78" text-anchor="middle" font-size="34" stroke="none">IT HAS BEEN</text>
-      <rect x="200" y="90" width="200" height="122" rx="6" fill="#fff"/>
-      <text id="days" class="sign-text" x="300" y="191" text-anchor="middle" font-size="104" stroke="none">–</text>
-      <text class="sign-text" x="300" y="248" text-anchor="middle" font-size="31" stroke="none"><tspan id="unit">DAYS</tspan> SINCE TOSIA'S</text>
-      <text class="sign-text" x="300" y="281" text-anchor="middle" font-size="31" stroke="none">LAST ACCIDENT</text>
-      <!-- ears -->
-      <circle cx="226" cy="372" r="19" fill="#9a5b2e"/><circle cx="226" cy="372" r="8" fill="#5c3a1e" stroke="none"/>
-      <circle cx="374" cy="372" r="19" fill="#9a5b2e"/><circle cx="374" cy="372" r="8" fill="#5c3a1e" stroke="none"/>
-      <!-- head -->
-      <circle cx="300" cy="400" r="88" fill="#9a5b2e"/>
-      <!-- hard hat -->
-      <path d="M232 346 C232 286 368 286 368 346 Z" fill="#fed90f"/>
-      <path d="M300 300 V346 M276 306 Q270 325 270 346 M324 306 Q330 325 330 346" stroke-width="3" fill="none"/>
-      <path d="M208 344 H392 Q398 358 384 360 H216 Q202 358 208 344 Z" fill="#fed90f"/>
-      <!-- muzzle -->
-      <ellipse cx="300" cy="452" rx="56" ry="36" fill="#e2b07a"/>
-      <!-- eyes (Springfield regulation size) -->
-      <circle cx="272" cy="394" r="30" fill="#fff"/>
-      <circle cx="328" cy="394" r="30" fill="#fff"/>
-      <circle cx="277" cy="397" r="5" fill="#1a1a1a"/>
-      <circle cx="323" cy="397" r="5" fill="#1a1a1a"/>
-      <!-- teeth, nose, mouth -->
-      <rect x="287" y="462" width="13" height="30" rx="3" fill="#fff" stroke-width="3"/>
-      <rect x="300" y="462" width="13" height="30" rx="3" fill="#fff" stroke-width="3"/>
-      <path d="M266 456 Q300 474 334 456" fill="none"/>
-      <ellipse cx="300" cy="434" rx="16" ry="11" fill="#1a1a1a"/>
-      <path d="M258 446 L216 438 M258 456 L214 460 M342 446 L384 438 M342 456 L386 460" stroke-width="2.5"/>
-      <!-- arms + paws gripping the post -->
-      <path d="M198 565 Q228 522 282 524" fill="none" stroke-width="34"/>
-      <path d="M198 565 Q228 522 282 524" fill="none" stroke="#9a5b2e" stroke-width="26"/>
-      <ellipse cx="295" cy="524" rx="22" ry="15" fill="#9a5b2e"/>
-      <path d="M302 513 v22 M310 516 v16" stroke-width="2.5"/>
-      <path d="M404 600 Q372 572 318 576" fill="none" stroke-width="34"/>
-      <path d="M404 600 Q372 572 318 576" fill="none" stroke="#9a5b2e" stroke-width="26"/>
-      <ellipse cx="305" cy="576" rx="22" ry="15" fill="#9a5b2e"/>
-      <path d="M298 565 v22 M290 568 v16" stroke-width="2.5"/>
-    </g>
+<a href="https://github.com/Punff/tosia-trouble-tracker/actions/workflows/reset.yml" target="_blank" rel="noopener" aria-label="Days since Tosia's last accident">
+  <svg viewBox="0 0 600 820">
+    <rect x="30" y="20" width="540" height="225" rx="6" fill="#f4f1e6" stroke="#222" stroke-width="6"/>
+    <rect x="215" y="40" width="170" height="112" fill="#fff" stroke="#222" stroke-width="5"/>
+    <text id="days" x="300" y="134" text-anchor="middle" font-size="92">–</text>
+    <text x="300" y="192" text-anchor="middle" font-size="32"><tspan id="unit">DAYS</tspan> SINCE TOSIA'S</text>
+    <text x="300" y="230" text-anchor="middle" font-size="32">LAST ACCIDENT</text>
+    <image href="beaver.png" x="100" y="275" width="438" height="542"/>
+    <rect x="406" y="243" width="18" height="350" fill="#9b6a3a" stroke="#222" stroke-width="4"/>
   </svg>
-
-  <section class="card" aria-live="polite">
-    <p class="mood" id="mood">Checking the incident log…</p>
-    <div class="stats">
-      <div class="stat"><b id="record">–</b><span>record streak</span></div>
-      <div class="stat"><b id="total">–</b><span>incidents logged</span></div>
-      <div class="stat"><b id="avg">–</b><span>avg. days between</span></div>
-    </div>
-    <p class="last" id="last"></p>
-
-    <a class="reset" href="https://github.com/Punff/tosia-trouble-tracker/actions/workflows/reset.yml" target="_blank" rel="noopener">D'OH! Reset the counter</a>
-    <p class="how">Opens GitHub → <b>Run workflow</b> → describe the damage. The beaver updates in about a minute.</p>
-  </section>
-
-  <section class="card">
-    <h2>Incident Log</h2>
-    <ol class="log" id="log"><li>Loading…</li></ol>
-  </section>
-
-  <footer>Springfield Nuclear Power Plant safety standards apply. Mostly.</footer>
-</main>
-
+</a>
+<div class="credit">Beaver: <a href="https://commons.wikimedia.org/wiki/File:Beaver_cartoon.png">Cedelmwood</a>, CC BY-SA 4.0</div>
 <script>
   const DAY = 86400000;
-  const $ = (id) => document.getElementById(id);
-
-  // Calendar-day math in the viewer's local time, immune to DST shifts.
   const toDayNum = (iso) => { const [y, m, d] = iso.split("-").map(Number); return Date.UTC(y, m - 1, d) / DAY; };
-  const today = () => { const n = new Date(); return Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()) / DAY; };
-  const fmt = (iso) => new Date(toDayNum(iso) * DAY).toLocaleDateString(undefined, { timeZone: "UTC", day: "numeric", month: "short", year: "numeric" });
-
-  function mood(days, isRecord) {
-    if (days <= 0) return "D'OH! Back to zero.";
-    if (isRecord) return "Woo-hoo! New record!";
-    if (days < 7) return "Mmm… fresh trouble.";
-    if (days < 30) return "Things are… suspiciously quiet.";
-    if (days < 100) return "Woo-hoo! Stay vigilant.";
-    return "Excellent. — C. M. Burns";
-  }
-
-  function render(data) {
-    const incidents = [...data.incidents].sort((a, b) => a.date.localeCompare(b.date));
-    const last = incidents[incidents.length - 1];
-    const days = Math.max(0, today() - toDayNum(last.date));
-
-    const gaps = incidents.slice(1).map((inc, i) => toDayNum(inc.date) - toDayNum(incidents[i].date));
-    const record = Math.max(days, ...gaps);
-    const isRecord = gaps.length > 0 && days > Math.max(...gaps);
-
-    const el = $("days");
-    el.textContent = days;
-    el.setAttribute("font-size", days >= 1000 ? 70 : days >= 100 ? 92 : 104);
-    el.classList.remove("bump"); void el.getBBox(); el.classList.add("bump");
-    $("unit").textContent = days === 1 ? "DAY" : "DAYS";
-    $("scene").setAttribute("aria-label", `A beaver in a hard hat holding a sign: it has been ${days} ${days === 1 ? "day" : "days"} since Tosia's last accident.`);
-
-    $("mood").textContent = mood(days, isRecord);
-    $("record").textContent = record;
-    $("total").textContent = incidents.length;
-    $("avg").textContent = gaps.length ? Math.round(gaps.reduce((a, b) => a + b, 0) / gaps.length) : "–";
-    $("last").textContent = `Last incident: ${fmt(last.date)} — “${last.what}”`;
-
-    const log = $("log");
-    log.replaceChildren(...incidents.map((inc, i) => {
-      const li = document.createElement("li");
-      const t = document.createElement("time");
-      t.dateTime = inc.date; t.textContent = fmt(inc.date);
-      const what = document.createElement("span");
-      what.textContent = inc.what;
-      const gap = document.createElement("span");
-      gap.className = "gap";
-      gap.textContent = i === 0 ? "the first of many" : `after ${gaps[i - 1]} day${gaps[i - 1] === 1 ? "" : "s"}`;
-      li.append(t, what, gap);
-      return li;
-    }).reverse());
-  }
+  const now = new Date();
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / DAY;
 
   fetch("data.json?t=" + Date.now(), { cache: "no-store" })
-    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(render)
-    .catch(() => { $("mood").textContent = "Couldn't load the incident log. D'oh."; $("log").innerHTML = ""; });
+    .then((r) => r.json())
+    .then(({ incidents }) => {
+      const last = incidents.map((i) => i.date).sort().pop();
+      const days = Math.max(0, today - toDayNum(last));
+      document.getElementById("days").textContent = days;
+      document.getElementById("days").setAttribute("font-size", days >= 100 ? 70 : 92);
+      document.getElementById("unit").textContent = days === 1 ? "DAY" : "DAYS";
+    })
+    .catch(() => { document.getElementById("days").textContent = "?"; });
 </script>
 </body>
 </html>

@@ -1,5 +1,7 @@
-# 🦫 Tosia Trouble Tracker
+# Tosia Trouble Tracker
 
-Days since Tosia's last security, legal or technical accident: https://punff.github.io/tosia-trouble-tracker/
+https://punff.github.io/tosia-trouble-tracker/
 
-**Reset the counter:** Actions → *Report an incident (reset counter)* → **Run workflow**, describe what happened (optionally a past date). It appends to `data.json`, commits, and redeploys the site.
+Reset: Actions → *Report an incident (reset counter)* → Run workflow.
+
+Beaver image: [Cedelmwood](https://commons.wikimedia.org/wiki/File:Beaver_cartoon.png), CC BY-SA 4.0.
